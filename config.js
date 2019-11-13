@@ -5,7 +5,7 @@ module.exports = {
   pathPrefix: '/',
   title: 'Blog by Darko Bozhinovski',
   subtitle: 'A collection of thoughts and ideas related to development. My dev scrapbook, if you will.',
-  copyright: '© All rights reserved.',
+  copyright: 'CC BY-NC-SA 4.0',
   disqusShortname: '',
   postsPerPage: 4,
   googleAnalyticsId: '',
