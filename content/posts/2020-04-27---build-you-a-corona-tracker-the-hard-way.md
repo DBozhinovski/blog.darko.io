@@ -29,7 +29,6 @@ And then, I left the idea to fester in the pit of abandoned project ideas (each 
 
 ![Is that you Rona?](/media/rona.jpg)
 
-
 The final result of the whole adventure can be seen at https://rona.darko.io. What's more interesting is the journey. Especially WHO's damned PDFs :)
 Also, the source for it: https://github.com/DBozhinovski/rona.darko.io
 
@@ -46,7 +45,7 @@ Aside from that, the structure isn't too interesting:
   * `pages` also contain components in a sense, but these are rendered by Gatsby directly as static web pages. So essentially, the "important" part of what the user sees on screen.
   * `templates` hold templates, usually markdown, but not always. In the case of Rona, it holds two types of templates:
     * `post.tsx` which renders the `.mdx` pages inside the `pages` directory. You can think of `.mdx` as markdown with benefits. [React benefits, that is](https://mdxjs.com/).
-    * `report.tsx` renders per-country reports for COVID-19 status world-wide. I would like to give a huge shout-out to ECDC for providing the data in the format they do. It's an example of well formatted and easily accssible data that opens some very interesting possibilities for applications such as Rona.
+    * `report.tsx` renders per-country reports for COVID-19 status world-wide. I would like to give a huge shout-out to ECDC for providing the data in the format they do. It's an example of well formatted and easily accessible data that opens some very interesting possibilities for applications such as Rona.
 * `scrapers` contains build-time scrapers for fetching data from their respective sources:
   * `wikipedia` scrapes wikipedia, the old fashioned way
   * `who` does some pretty unholy things (which I will get into), but I didn't really have a choice. And I wanted the data bad.
@@ -194,7 +193,7 @@ query EcdcDataQuery {
 }
 ```
 
-Which, return an object like:
+Which, returns an object like:
 
 ```js
 {
@@ -377,22 +376,22 @@ module.exports = scrapeWikipedia;
 ### 3. WHO
 
 I'm no stranger to parsing weird formats, but seriously, f**k parsing PDF files. You get some plain text (if you're lucky). Have fun.
-Pausing the rant for a second here, WHO provides a daily report of the current world-wide sutiation according to their metrics. Each of those reports is, well, a PDF file, with a similar structure. There is a per-country table with stats in the files. Which happens to be useless if you want to access the data for anything else than just reading the PDF.
+Pausing the rant for a second here, WHO provides a daily report of the current world-wide situation according to their metrics. Each of those reports is, well, a PDF file, with a similar structure. There is a per-country table with stats in the files. Which happens to be useless if you want to access the data for anything else than just reading the PDF.
 
-I thought about giving up on WHO, but I often have more stuborness than sense for these kinds of problem.
+I thought about giving up on WHO, but I often have more stubbornness than sense for these kinds of problem.
 
 So, the reports are located at: https://www.who.int/emergencies/diseases/novel-coronavirus-2019/situation-reports. It's pretty easy to get the latest one, by using similar methods to what we did with wikipedia and DOM selectors.
 
 #### Attempt 1 [failed]: Parsing via a classifier
 
-My first attempt invloved being a smart**s, and trying to trick the file into giving up it's data.
+My first attempt involved being a smart**s, and trying to trick the file into giving up its data.
 
 The idea was:
 
 1. Split the textual data into files (using `.split('\n')`)
 2. Run each line through https://github.com/axa-group/nlp.js, and filter the lines that are data from the ones that are gibberish (in the context of being able to use the data for an application):
 
-The second step also involved "positive" and "negative" examples. E.g.
+The second step also involved "positive" and "negative" examples:
 
 ```js
 // Positive example - we want to keep lines like these, since they are data
@@ -408,7 +407,7 @@ The second step also involved "positive" and "negative" examples. E.g.
 ```
 
 ... and negative ones:
-  
+
 ```js
 // Negative example - we filter these out, as they aren't the data we're after
 [
@@ -611,7 +610,7 @@ My "marvelous" UI design skills aside, the pages themselves are pretty simple. I
 
 ### index.tsx
 
-The landing page has can show two pieces of data - global statistics, and local statistics, based on geolocation (if the user allows us access to it). As an aside, we're not being creepy here - no data sent to google, no trackers, no analytics or any of that shadiness. We simply ping [OpenStreetMap](https://nominatim.openstreetmap.org/reverse) for a country name for the given coordinates, and that's that. Detals at: https://github.com/DBozhinovski/rona.darko.io/blob/master/src/components/LocalStats.tsx
+The landing page has can show two pieces of data - global statistics, and local statistics, based on geolocation (if the user allows us access to it). As an aside, we're not being creepy here - no data sent to google, no trackers, no analytics or any of that shadiness. We simply ping [OpenStreetMap](https://nominatim.openstreetmap.org/reverse) for a country name for the given coordinates, and that's that. Details at: https://github.com/DBozhinovski/rona.darko.io/blob/master/src/components/LocalStats.tsx
 
 If we don't get geolocation, we simply give the user a link for manual search. What may be a bit more interesting here is the GraphQL query:
 
